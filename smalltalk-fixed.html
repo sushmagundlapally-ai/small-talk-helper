@@ -134,29 +134,31 @@
         `).join('');
     }
 
-    // Refresh news - fetch live from Hacker News
+    // Refresh news - fetch live headlines from multiple sources
     async function refreshNews() {
         const btn = document.getElementById('refreshBtn');
         const container = document.getElementById('techNewsCards');
         
         btn.textContent = '⏳ Loading...';
         btn.disabled = true;
-        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">Fetching latest news from Hacker News...</div>';
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">📡 Fetching live headlines...</div>';
+        
+        const articles = [];
         
         try {
-            const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-            const storyIds = await response.json();
+            // Fetch from Hacker News (top stories)
+            const hnResponse = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+            const storyIds = await hnResponse.json();
             
-            // Get top 6 stories
-            const articles = [];
-            for (let i = 0; i < 6 && i < storyIds.length; i++) {
+            // Get top 4 from Hacker News
+            for (let i = 0; i < 4 && i < storyIds.length; i++) {
                 const storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyIds[i]}.json`);
                 const story = await storyResponse.json();
                 
                 if (story && story.title) {
                     articles.push({
                         title: story.title,
-                        description: story.text ? story.text.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 'Click to read the full story on Hacker News',
+                        description: `🔥 ${story.score} points • ${story.descendants || 0} comments`,
                         source: 'Hacker News',
                         url: story.url || `https://news.ycombinator.com/item?id=${story.id}`,
                         date: new Date(story.time * 1000).toLocaleDateString()
@@ -164,9 +166,30 @@
                 }
             }
             
+            // Fetch from Reddit r/technology
+            try {
+                const redditResponse = await fetch('https://www.reddit.com/r/technology/hot.json?limit=3');
+                const redditData = await redditResponse.json();
+                
+                if (redditData.data && redditData.data.children) {
+                    redditData.data.children.slice(0, 2).forEach(post => {
+                        const p = post.data;
+                        if (!p.stickied && p.title) {
+                            articles.push({
+                                title: p.title,
+                                description: `⬆️ ${p.ups} upvotes • ${p.num_comments} comments`,
+                                source: 'Reddit r/technology',
+                                url: p.url.startsWith('http') ? p.url : `https://reddit.com${p.permalink}`,
+                                date: new Date(p.created_utc * 1000).toLocaleDateString()
+                            });
+                        }
+                    });
+                }
+            } catch (e) { console.log('Reddit fetch failed, continuing...'); }
+            
             if (articles.length > 0) {
                 displayNews(articles);
-                btn.textContent = '✅ Refreshed!';
+                btn.textContent = '✅ ' + articles.length + ' Headlines!';
                 setTimeout(() => { btn.textContent = '🔄 Refresh News'; }, 2000);
             } else {
                 throw new Error('No articles fetched');
