@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test - Small Talk</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        .card { background: white; padding: 20px; margin: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h3 { color: #6366f1; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Tech News Test</h1>
+    <p>If you see news cards below, JavaScript is working:</p>
+    
+    <div id="newsContainer"></div>
+    
+    <script>
+        // Simple test
+        const news = [
+            { title: "AI Breakthrough", description: "New language model achieves human-level reasoning", source: "Tech Insider" },
+            { title: "Quantum Computing Milestone", description: "1000-qubit processor developed", source: "Science Daily" },
+            { title: "Solar Panels 50% More Efficient", description: "Breakthrough in photovoltaic technology", source: "Green Tech" }
+        ];
+        
+        const container = document.getElementById('newsContainer');
+        
+        container.innerHTML = news.map(item => `
+            <div class="card">
+                <h3>${item.title}</h3>
+                <p>${item.description}</p>
+                <small style="color: #999;">${item.source}</small>
+            </div>
+        `).join('');
+        
+        console.log('Test page loaded successfully!');
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallTalk - Fixed Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💬 SmallTalk</h1>
+            <p class="tagline">Never run out of things to say</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Daily Tech Highlights Section -->
+        <section class="section" id="tech-highlights">
+            <div class="section-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+                    <div>
+                        <h2>🚀 Tech Highlights This Week</h2>
+                        <p class="section-description">Fresh topics updated daily to keep you in the loop</p>
+                    </div>
+                    <div class="date-badge" id="currentDate"></div>
+                </div>
+            </div>
+            <div id="techNewsCards" class="cards-grid">
+                <!-- News will load here -->
+            </div>
+        </section>
+
+        <!-- Meeting Topic Research Section -->
+        <section class="section" id="meeting-research">
+            <div class="section-header">
+                <h2>🎯 Meeting Topic Research</h2>
+                <p class="section-description">Get conversation starters based on your meeting topic</p>
+            </div>
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="meetingTopic" 
+                    placeholder="Enter meeting topic (e.g., Machine Learning, Cloud Computing)"
+                    class="topic-input"
+                />
+                <button class="search-btn" onclick="searchMeetingTopic()">Search</button>
+            </div>
+            <div id="topicResults" class="results-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>SmallTalk - Making conversations easier 💙</p>
+        </div>
+    </footer>
+
+    <script>
+    // Display date
+    function displayDate() {
+        const dateEl = document.getElementById('currentDate');
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateEl.textContent = `📅 ${today.toLocaleDateString('en-US', options)}`;
+    }
+
+    // Get demo news
+    function getDemoNews() {
+        const today = new Date().toLocaleDateString();
+        return [
+            {
+                title: "AI Breakthrough: New Language Model Achieves Human-Level Reasoning",
+                description: "Researchers unveil a groundbreaking AI system that demonstrates unprecedented reasoning capabilities.",
+                source: "Tech Insider",
+                date: today
+            },
+            {
+                title: "Quantum Computing Reaches New Milestone with 1000-Qubit Processor",
+                description: "Major tech company announces successful development of a 1000-qubit quantum processor.",
+                source: "Science Daily",
+                date: today
+            },
+            {
+                title: "Sustainable Tech: Solar Panels Now 50% More Efficient",
+                description: "Breakthrough in photovoltaic technology promises to dramatically reduce the cost of solar energy.",
+                source: "Green Tech News",
+                date: today
+            },
+            {
+                title: "New Programming Language Simplifies Concurrent Computing",
+                description: "Developers release innovative language that makes parallel programming accessible to mainstream developers.",
+                source: "Dev Community",
+                date: today
+            },
+            {
+                title: "Breakthrough in Edge Computing Enables Real-Time AI on Devices",
+                description: "New chip architecture allows complex AI models to run directly on smartphones and IoT devices.",
+                source: "Hardware Weekly",
+                date: today
+            },
+            {
+                title: "Open Source Project Hits 1 Million Contributors Worldwide",
+                description: "Popular open-source initiative celebrates milestone with contributors from every country.",
+                source: "Open Source Daily",
+                date: today
+            }
+        ];
+    }
+
+    // Display news
+    function displayNews(articles) {
+        const container = document.getElementById('techNewsCards');
+        container.innerHTML = articles.map(article => `
+            <div class="news-card">
+                <h3>${article.title}</h3>
+                <p>${article.description}</p>
+                <div class="news-meta">
+                    <span class="news-source">${article.source}</span>
+                    <span class="news-date">${article.date}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Search meeting topic
+    function searchMeetingTopic() {
+        const topic = document.getElementById('meetingTopic').value.trim();
+        const results = document.getElementById('topicResults');
+        
+        if (!topic) {
+            results.innerHTML = '<div class="error">Please enter a topic</div>';
+            return;
+        }
+        
+        results.innerHTML = `
+            <div class="result-card">
+                <h3>💡 Research "${topic}"</h3>
+                <p>Here are some conversation starters:</p>
+                <ul>
+                    <li>What's your experience with ${topic}?</li>
+                    <li>What are the biggest challenges in ${topic} right now?</li>
+                    <li>What innovations in ${topic} are you most excited about?</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Page loading...');
+        displayDate();
+        displayNews(getDemoNews());
+        console.log('Page loaded successfully!');
+    });
+    </script>
+</body>
+</html>
+

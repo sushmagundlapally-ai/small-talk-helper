@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallTalk - Your Conversation Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💬 SmallTalk</h1>
+            <p class="tagline">Never run out of things to say</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Daily Tech Highlights Section -->
+        <section class="section" id="tech-highlights">
+            <div class="section-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+                    <div>
+                        <h2>🚀 Tech Highlights This Week</h2>
+                        <p class="section-description">Fresh topics updated daily to keep you in the loop</p>
+                    </div>
+                    <div class="date-badge" id="currentDate"></div>
+                </div>
+            </div>
+            <div id="techNewsCards" class="cards-grid"></div>
+        </section>
+
+        <!-- Meeting Topic Research Section -->
+        <section class="section" id="meeting-research">
+            <div class="section-header">
+                <h2>🎯 Meeting Topic Research</h2>
+                <p class="section-description">Get conversation starters based on your meeting topic</p>
+            </div>
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="meetingTopic" 
+                    placeholder="Enter meeting topic (e.g., Machine Learning, Cloud Computing, Sustainability)"
+                    class="topic-input"
+                />
+                <button class="search-btn" onclick="searchMeetingTopic()">Search</button>
+            </div>
+            <div id="topicResults" class="results-container"></div>
+        </section>
+
+        <!-- Name Lookup Section -->
+        <section class="section" id="name-lookup">
+            <div class="section-header">
+                <h2>👤 Know Your Attendees</h2>
+                <p class="section-description">Quick links to search public sources - Google, LinkedIn, GitHub & more</p>
+            </div>
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="personName" 
+                    placeholder="Enter name (e.g., John Smith, Tech Leader)"
+                    class="topic-input"
+                />
+                <button class="search-btn" onclick="lookupPerson()">Look Up</button>
+            </div>
+            <div id="personResults" class="results-container"></div>
+        </section>
+
+        <!-- Conversation Tips Section -->
+        <section class="section tips-section" id="conversation-tips">
+            <div class="section-header">
+                <h2>💡 Conversation Tips & Tricks</h2>
+                <p class="section-description">Expert advice for breaking the ice and keeping conversations flowing</p>
+            </div>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎬</div>
+                    <h3>Opening Lines</h3>
+                    <ul>
+                        <li>"What are you working on these days?"</li>
+                        <li>"How did you get into [their field]?"</li>
+                        <li>"What's the most exciting thing happening in your area?"</li>
+                        <li>"I saw this interesting tech news about [topic]. What do you think?"</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">👂</div>
+                    <h3>Active Listening</h3>
+                    <ul>
+                        <li>Ask follow-up questions about what they just said</li>
+                        <li>Use "Tell me more about..." to show genuine interest</li>
+                        <li>Mirror their enthusiasm level</li>
+                        <li>Nod and maintain appropriate eye contact</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🔄</div>
+                    <h3>Keeping It Going</h3>
+                    <ul>
+                        <li>Share a related personal experience</li>
+                        <li>Ask about their opinions on industry trends</li>
+                        <li>Use the "FORD" method: Family, Occupation, Recreation, Dreams</li>
+                        <li>Connect their interests to current events</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🚪</div>
+                    <h3>Graceful Exits</h3>
+                    <ul>
+                        <li>"It was great chatting! I should let you get back to..."</li>
+                        <li>"I'm going to grab some coffee/water, catch you later?"</li>
+                        <li>"Let's continue this conversation later, I'd love to hear more"</li>
+                        <li>"Nice talking with you! Enjoy the rest of [event]"</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">⚠️</div>
+                    <h3>What to Avoid</h3>
+                    <ul>
+                        <li>Don't dominate the conversation</li>
+                        <li>Avoid controversial topics early on</li>
+                        <li>Don't interrupt or finish their sentences</li>
+                        <li>Avoid checking your phone constantly</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h3>Pro Tips</h3>
+                    <ul>
+                        <li>Prepare 2-3 interesting topics beforehand</li>
+                        <li>Comment on the environment/event you're both at</li>
+                        <li>Ask about projects rather than job titles</li>
+                        <li>Remember: most people enjoy talking about themselves</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>SmallTalk - Making conversations easier, one topic at a time 💙</p>
+            <p class="footer-note">✨ All features work out of the box! No API keys required.</p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+

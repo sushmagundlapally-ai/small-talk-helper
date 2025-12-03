@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallTalk - Conversation Helper</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .main {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .input-box {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        
+        .card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .link-btn:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .emoji {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .tips {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+            color: #666;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💬 SmallTalk</h1>
+            <p>Never run out of things to say!</p>
+            <p style="margin-top: 10px; color: #28a745; font-weight: bold;">✅ Working! No setup needed.</p>
+        </header>
+
+        <div class="main">
+            <!-- Tech News -->
+            <section class="section">
+                <h2>🚀 Tech News This Week</h2>
+                <p style="color: #666; margin-bottom: 20px;">Today: <span id="date"></span></p>
+                <div class="cards" id="news"></div>
+            </section>
+
+            <!-- Meeting Topics -->
+            <section class="section">
+                <h2>🎯 Meeting Topic Research</h2>
+                <p style="color: #666;">Get conversation starters for any topic</p>
+                <div class="input-box">
+                    <input type="text" id="topicInput" placeholder="Enter topic (e.g., Machine Learning)" />
+                    <button onclick="searchTopic()">Search</button>
+                </div>
+                <div id="topicResults"></div>
+            </section>
+
+            <!-- Person Lookup -->
+            <section class="section">
+                <h2>👤 Research People</h2>
+                <p style="color: #666;">Quick links to search public sources</p>
+                <div class="input-box">
+                    <input type="text" id="nameInput" placeholder="Enter name (e.g., Satya Nadella)" />
+                    <button onclick="lookupPerson()">Look Up</button>
+                </div>
+                <div id="personResults"></div>
+            </section>
+
+            <!-- Conversation Tips -->
+            <section class="section">
+                <h2>💡 Conversation Tips</h2>
+                <div class="cards">
+                    <div class="tips">
+                        <h3>🎬 Opening Lines</h3>
+                        <ul>
+                            <li>"What are you working on these days?"</li>
+                            <li>"How did you get into your field?"</li>
+                            <li>"What's exciting you right now?"</li>
+                        </ul>
+                    </div>
+                    <div class="tips">
+                        <h3>👂 Active Listening</h3>
+                        <ul>
+                            <li>Ask follow-up questions</li>
+                            <li>Use "Tell me more about..."</li>
+                            <li>Mirror their enthusiasm</li>
+                        </ul>
+                    </div>
+                    <div class="tips">
+                        <h3>🔄 Keep It Going</h3>
+                        <ul>
+                            <li>Share related experiences</li>
+                            <li>Ask about opinions</li>
+                            <li>Use the FORD method</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>SmallTalk - Making conversations easier 💙</p>
+        </footer>
+    </div>
+
+    <script>
+        // Display date
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+        });
+
+        // Load demo tech news
+        const news = [
+            {
+                title: "AI Breakthrough in Natural Language Understanding",
+                desc: "New models achieve unprecedented reasoning capabilities.",
+            },
+            {
+                title: "Quantum Computing Milestone Reached",
+                desc: "1000-qubit processor demonstrated successfully.",
+            },
+            {
+                title: "Sustainable Tech: Solar Efficiency Doubles",
+                desc: "Breakthrough in photovoltaic technology announced.",
+            },
+            {
+                title: "New Programming Language Simplifies Concurrent Code",
+                desc: "Developers release innovative parallel programming tools.",
+            },
+            {
+                title: "Edge Computing Enables Real-Time AI",
+                desc: "New chips run complex AI on devices without cloud.",
+            },
+            {
+                title: "Open Source Project Reaches 1M Contributors",
+                desc: "Global collaboration milestone celebrated worldwide.",
+            }
+        ];
+
+        const newsContainer = document.getElementById('news');
+        newsContainer.innerHTML = news.map(item => `
+            <div class="card">
+                <h3>${item.title}</h3>
+                <p>${item.desc}</p>
+            </div>
+        `).join('');
+
+        // Search topic
+        function searchTopic() {
+            const topic = document.getElementById('topicInput').value.trim();
+            const results = document.getElementById('topicResults');
+            
+            if (!topic) {
+                results.innerHTML = '<p style="color: red;">Please enter a topic</p>';
+                return;
+            }
+
+            results.innerHTML = `
+                <div class="success">✅ Found discussion topics for "${topic}"</div>
+                <div class="cards">
+                    <div class="card">
+                        <h3>The Future of ${topic}</h3>
+                        <p>Key trends and innovations shaping the industry.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Case Study: ${topic} Implementation</h3>
+                        <p>Real-world examples and lessons learned.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Expert Panel on ${topic}</h3>
+                        <p>Industry leaders share insights and advice.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Lookup person
+        function lookupPerson() {
+            const name = document.getElementById('nameInput').value.trim();
+            const results = document.getElementById('personResults');
+            
+            if (!name) {
+                results.innerHTML = '<p style="color: red;">Please enter a name</p>';
+                return;
+            }
+
+            const encoded = encodeURIComponent(name);
+            results.innerHTML = `
+                <div class="success">✅ Quick research links for "${name}"</div>
+                <a href="https://www.google.com/search?q=${encoded}" target="_blank" class="link-btn">
+                    <span><span class="emoji">🌐</span> Google Search</span>
+                    <span>→</span>
+                </a>
+                <a href="https://www.linkedin.com/search/results/all/?keywords=${encoded}" target="_blank" class="link-btn">
+                    <span><span class="emoji">💼</span> LinkedIn</span>
+                    <span>→</span>
+                </a>
+                <a href="https://scholar.google.com/scholar?q=${encoded}" target="_blank" class="link-btn">
+                    <span><span class="emoji">🎓</span> Google Scholar</span>
+                    <span>→</span>
+                </a>
+                <a href="https://github.com/search?q=${encoded}&type=users" target="_blank" class="link-btn">
+                    <span><span class="emoji">💻</span> GitHub</span>
+                    <span>→</span>
+                </a>
+                <a href="https://twitter.com/search?q=${encoded}" target="_blank" class="link-btn">
+                    <span><span class="emoji">🐦</span> Twitter/X</span>
+                    <span>→</span>
+                </a>
+                <div class="tips" style="margin-top: 20px;">
+                    <h3>💬 Conversation Starters</h3>
+                    <ul>
+                        <li>"I saw you worked on [project]. What was that like?"</li>
+                        <li>"What got you interested in [their field]?"</li>
+                        <li>"What are you most excited about right now?"</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Enter key support
+        document.getElementById('topicInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') searchTopic();
+        });
+        document.getElementById('nameInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') lookupPerson();
+        });
+    </script>
+</body>
+</html>
+

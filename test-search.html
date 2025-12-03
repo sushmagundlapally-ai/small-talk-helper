@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallTalk - Search Test</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔍 Search Diagnostic</h1>
+            <p class="tagline">Testing all search functionality</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <h2>Configuration Status</h2>
+            <div id="configStatus" style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; margin: 1rem 0;">
+                Checking...
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>1. Test Reddit Search (No API needed)</h2>
+            <button onclick="testReddit()" class="search-btn">Test Reddit Search</button>
+            <div id="redditResult" style="margin-top: 1rem;"></div>
+        </section>
+
+        <section class="section">
+            <h2>2. Test arXiv Search (No API needed)</h2>
+            <button onclick="testArxiv()" class="search-btn">Test arXiv Search</button>
+            <div id="arxivResult" style="margin-top: 1rem;"></div>
+        </section>
+
+        <section class="section">
+            <h2>3. Test Hacker News (No API needed)</h2>
+            <button onclick="testHackerNews()" class="search-btn">Test Hacker News</button>
+            <div id="hnResult" style="margin-top: 1rem;"></div>
+        </section>
+
+        <section class="section">
+            <h2>Console Log</h2>
+            <div id="consoleLog" style="padding: 1rem; background: var(--bg-tertiary); border-radius: 8px; font-family: monospace; font-size: 0.85rem; max-height: 300px; overflow-y: auto;">
+                Waiting for tests...
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><a href="index.html" style="color: var(--primary-color);">← Back to SmallTalk</a></p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Capture console logs
+        const logs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            logs.push(['LOG', ...args]);
+            updateConsoleLog();
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            logs.push(['ERROR', ...args]);
+            updateConsoleLog();
+            originalError.apply(console, args);
+        };
+        
+        function updateConsoleLog() {
+            const logDiv = document.getElementById('consoleLog');
+            logDiv.innerHTML = logs.map(log => {
+                const [type, ...rest] = log;
+                const color = type === 'ERROR' ? 'var(--danger-color)' : 'var(--text-primary)';
+                return `<div style="color: ${color}; margin: 0.25rem 0;">[${type}] ${rest.join(' ')}</div>`;
+            }).join('');
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Check config
+        document.addEventListener('DOMContentLoaded', () => {
+            const configDiv = document.getElementById('configStatus');
+            const config = window.SMALLTALK_CONFIG;
+            
+            if (config) {
+                configDiv.innerHTML = `
+                    <h3 style="color: var(--success-color);">✅ Config Loaded</h3>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li>Google API: ${config.GOOGLE_SEARCH_API_KEY ? '✅ Set' : '❌ Empty'}</li>
+                        <li>Search Engine ID: ${config.GOOGLE_SEARCH_ENGINE_ID ? '✅ Set' : '❌ Empty'}</li>
+                        <li>OpenAI: ${config.OPENAI_API_KEY ? '✅ Set' : '❌ Empty'}</li>
+                        <li>Anthropic: ${config.ANTHROPIC_API_KEY ? '✅ Set' : '❌ Empty'}</li>
+                    </ul>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">
+                        Tests below work WITHOUT API keys
+                    </p>
+                `;
+            } else {
+                configDiv.innerHTML = `
+                    <h3 style="color: var(--danger-color);">❌ Config Not Loaded</h3>
+                    <p>config.js may not be loaded properly</p>
+                `;
+            }
+        });
+        
+        // Test functions
+        async function testReddit() {
+            const resultDiv = document.getElementById('redditResult');
+            resultDiv.innerHTML = '<div class="loading">Testing Reddit API...</div>';
+            
+            try {
+                console.log('Testing Reddit search for "machine learning"');
+                const response = await fetch(
+                    'https://www.reddit.com/search.json?q=machine+learning&limit=3&sort=relevance&t=week'
+                );
+                
+                console.log('Reddit response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Reddit data received:', data.data?.children?.length, 'posts');
+                
+                if (data.data && data.data.children && data.data.children.length > 0) {
+                    resultDiv.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 2px solid var(--success-color);">
+                            <h3 style="color: var(--success-color);">✅ Reddit Search Works!</h3>
+                            <p>Found ${data.data.children.length} posts</p>
+                            <div style="margin-top: 1rem;">
+                                ${data.data.children.slice(0, 2).map(post => `
+                                    <div style="padding: 0.5rem; background: var(--bg-secondary); border-radius: 5px; margin: 0.5rem 0;">
+                                        <strong>${post.data.title}</strong>
+                                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                            r/${post.data.subreddit} - ${post.data.num_comments} comments
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border: 2px solid var(--warning-color);">
+                            <h3 style="color: var(--warning-color);">⚠️ No Results</h3>
+                            <p>Reddit API responded but returned no posts</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Reddit test failed:', error);
+                resultDiv.innerHTML = `
+                    <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 2px solid var(--danger-color);">
+                        <h3 style="color: var(--danger-color);">❌ Reddit Test Failed</h3>
+                        <p>Error: ${error.message}</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Check console for details</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testArxiv() {
+            const resultDiv = document.getElementById('arxivResult');
+            resultDiv.innerHTML = '<div class="loading">Testing arXiv API...</div>';
+            
+            try {
+                console.log('Testing arXiv search for "machine learning"');
+                const response = await fetch(
+                    'https://export.arxiv.org/api/query?search_query=all:machine+learning&start=0&max_results=3&sortBy=submittedDate&sortOrder=descending'
+                );
+                
+                console.log('arXiv response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, 'text/xml');
+                
+                const entries = xml.getElementsByTagName('entry');
+                console.log('arXiv data received:', entries.length, 'papers');
+                
+                if (entries.length > 0) {
+                    resultDiv.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 2px solid var(--success-color);">
+                            <h3 style="color: var(--success-color);">✅ arXiv Search Works!</h3>
+                            <p>Found ${entries.length} papers</p>
+                            <div style="margin-top: 1rem;">
+                                ${Array.from(entries).slice(0, 2).map(entry => {
+                                    const title = entry.getElementsByTagName('title')[0]?.textContent || 'No title';
+                                    return `
+                                        <div style="padding: 0.5rem; background: var(--bg-secondary); border-radius: 5px; margin: 0.5rem 0;">
+                                            <strong>${title.substring(0, 100)}...</strong>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border: 2px solid var(--warning-color);">
+                            <h3 style="color: var(--warning-color);">⚠️ No Results</h3>
+                            <p>arXiv API responded but returned no papers</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('arXiv test failed:', error);
+                resultDiv.innerHTML = `
+                    <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 2px solid var(--danger-color);">
+                        <h3 style="color: var(--danger-color);">❌ arXiv Test Failed</h3>
+                        <p>Error: ${error.message}</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Check console for details</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testHackerNews() {
+            const resultDiv = document.getElementById('hnResult');
+            resultDiv.innerHTML = '<div class="loading">Testing Hacker News API...</div>';
+            
+            try {
+                console.log('Testing Hacker News API');
+                const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+                
+                console.log('HN response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const storyIds = await response.json();
+                console.log('HN data received:', storyIds.length, 'story IDs');
+                
+                // Fetch first 2 stories
+                const stories = [];
+                for (let i = 0; i < 2 && i < storyIds.length; i++) {
+                    const storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyIds[i]}.json`);
+                    const story = await storyResponse.json();
+                    stories.push(story);
+                }
+                
+                if (stories.length > 0) {
+                    resultDiv.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 2px solid var(--success-color);">
+                            <h3 style="color: var(--success-color);">✅ Hacker News Works!</h3>
+                            <p>Found ${storyIds.length} stories, showing first 2:</p>
+                            <div style="margin-top: 1rem;">
+                                ${stories.map(story => `
+                                    <div style="padding: 0.5rem; background: var(--bg-secondary); border-radius: 5px; margin: 0.5rem 0;">
+                                        <strong>${story.title}</strong>
+                                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                            ${story.score} points - ${story.descendants || 0} comments
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border: 2px solid var(--warning-color);">
+                            <h3 style="color: var(--warning-color);">⚠️ No Results</h3>
+                            <p>HN API responded but returned no stories</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('HN test failed:', error);
+                resultDiv.innerHTML = `
+                    <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 2px solid var(--danger-color);">
+                        <h3 style="color: var(--danger-color);">❌ Hacker News Test Failed</h3>
+                        <p>Error: ${error.message}</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Check console for details</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
+

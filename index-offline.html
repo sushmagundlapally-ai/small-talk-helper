@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallTalk - Offline Mode</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💬 SmallTalk</h1>
+            <p class="tagline">Never run out of things to say</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--warning-color);">
+                📴 Offline Mode - Demo Content Only
+            </p>
+            <p style="margin-top: 0.5rem;">
+                <a href="index.html" style="color: var(--primary-color); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+                    🔄 Try Online Version
+                </a>
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Daily Tech Highlights Section -->
+        <section class="section" id="tech-highlights">
+            <div class="section-header">
+                <h2>🚀 Tech Highlights This Week</h2>
+                <p class="section-description">Demo content (offline mode)</p>
+                <div class="date-display" id="currentDate"></div>
+            </div>
+            <div id="techNewsCards" class="cards-grid">
+                <!-- Content loaded by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Meeting Topic Research Section -->
+        <section class="section" id="meeting-research">
+            <div class="section-header">
+                <h2>🎯 Meeting Topic Research</h2>
+                <p class="section-description">Enter a topic to see demo discussion points</p>
+            </div>
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="meetingTopic" 
+                    placeholder="Enter meeting topic (e.g., Machine Learning)"
+                    class="topic-input"
+                />
+                <button class="search-btn" onclick="searchMeetingTopic()">Search</button>
+            </div>
+            <div id="topicResults" class="results-container"></div>
+        </section>
+
+        <!-- Name Lookup Section -->
+        <section class="section" id="name-lookup">
+            <div class="section-header">
+                <h2>👤 Know Your Attendees</h2>
+                <p class="section-description">Demo mode - shows conversation tips</p>
+            </div>
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="personName" 
+                    placeholder="Enter name"
+                    class="topic-input"
+                />
+                <button class="search-btn" onclick="lookupPerson()">Look Up</button>
+            </div>
+            <div id="personResults" class="results-container"></div>
+        </section>
+
+        <!-- Conversation Tips Section -->
+        <section class="section tips-section" id="conversation-tips">
+            <div class="section-header">
+                <h2>💡 Conversation Tips & Tricks</h2>
+                <p class="section-description">Expert advice for breaking the ice</p>
+            </div>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎬</div>
+                    <h3>Opening Lines</h3>
+                    <ul>
+                        <li>"What are you working on these days?"</li>
+                        <li>"How did you get into [their field]?"</li>
+                        <li>"What's the most exciting thing happening in your area?"</li>
+                        <li>"I saw this interesting tech news about [topic]. What do you think?"</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">👂</div>
+                    <h3>Active Listening</h3>
+                    <ul>
+                        <li>Ask follow-up questions about what they just said</li>
+                        <li>Use "Tell me more about..." to show genuine interest</li>
+                        <li>Mirror their enthusiasm level</li>
+                        <li>Nod and maintain appropriate eye contact</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🔄</div>
+                    <h3>Keeping It Going</h3>
+                    <ul>
+                        <li>Share a related personal experience</li>
+                        <li>Ask about their opinions on industry trends</li>
+                        <li>Use the "FORD" method: Family, Occupation, Recreation, Dreams</li>
+                        <li>Connect their interests to current events</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🚪</div>
+                    <h3>Graceful Exits</h3>
+                    <ul>
+                        <li>"It was great chatting! I should let you get back to..."</li>
+                        <li>"I'm going to grab some coffee/water, catch you later?"</li>
+                        <li>"Let's continue this conversation later, I'd love to hear more"</li>
+                        <li>"Nice talking with you! Enjoy the rest of [event]"</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">⚠️</div>
+                    <h3>What to Avoid</h3>
+                    <ul>
+                        <li>Don't dominate the conversation</li>
+                        <li>Avoid controversial topics early on</li>
+                        <li>Don't interrupt or finish their sentences</li>
+                        <li>Avoid checking your phone constantly</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h3>Pro Tips</h3>
+                    <ul>
+                        <li>Prepare 2-3 interesting topics beforehand</li>
+                        <li>Comment on the environment/event you're both at</li>
+                        <li>Ask about projects rather than job titles</li>
+                        <li>Remember: most people enjoy talking about themselves</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>SmallTalk - Making conversations easier, one topic at a time 💙</p>
+            <p class="footer-note">📴 Offline Mode - For full functionality with live APIs, <a href="index.html" style="color: var(--primary-color);">try the online version</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Display current date
+        function displayCurrentDate() {
+            const dateElement = document.getElementById('currentDate');
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const today = new Date();
+            dateElement.textContent = `📅 ${today.toLocaleDateString('en-US', options)}`;
+        }
+
+        // Demo tech news
+        function loadDemoNews() {
+            const today = new Date().toLocaleDateString();
+            const articles = [
+                {
+                    title: "AI Breakthrough: New Language Model Achieves Human-Level Reasoning",
+                    description: "Researchers unveil a groundbreaking AI system that demonstrates unprecedented reasoning capabilities, marking a significant milestone in artificial intelligence development.",
+                    source: "Tech Insider",
+                    date: today
+                },
+                {
+                    title: "Quantum Computing Reaches New Milestone with 1000-Qubit Processor",
+                    description: "Major tech company announces successful development of a 1000-qubit quantum processor, potentially revolutionizing fields from drug discovery to cryptography.",
+                    source: "Science Daily",
+                    date: today
+                },
+                {
+                    title: "Sustainable Tech: Solar Panels Now 50% More Efficient",
+                    description: "Breakthrough in photovoltaic technology promises to dramatically reduce the cost of solar energy and accelerate the transition to renewable power.",
+                    source: "Green Tech News",
+                    date: today
+                },
+                {
+                    title: "New Programming Language Simplifies Concurrent Computing",
+                    description: "Developers release innovative language that makes parallel programming accessible to mainstream developers, potentially transforming software development.",
+                    source: "Dev Community",
+                    date: today
+                },
+                {
+                    title: "Breakthrough in Edge Computing Enables Real-Time AI on Devices",
+                    description: "New chip architecture allows complex AI models to run directly on smartphones and IoT devices without cloud connectivity.",
+                    source: "Hardware Weekly",
+                    date: today
+                },
+                {
+                    title: "Open Source Project Hits 1 Million Contributors Worldwide",
+                    description: "Popular open-source initiative celebrates milestone with contributors from every country, demonstrating the power of global collaboration.",
+                    source: "Open Source Daily",
+                    date: today
+                }
+            ];
+
+            const newsContainer = document.getElementById('techNewsCards');
+            newsContainer.innerHTML = articles.map(article => `
+                <div class="news-card">
+                    <h3>${article.title}</h3>
+                    <p>${article.description}</p>
+                    <div class="news-meta">
+                        <span class="news-source">${article.source}</span>
+                        <span class="news-date">${article.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search meeting topic (demo)
+        function searchMeetingTopic() {
+            const topicInput = document.getElementById('meetingTopic');
+            const resultsContainer = document.getElementById('topicResults');
+            const topic = topicInput.value.trim();
+            
+            if (!topic) {
+                resultsContainer.innerHTML = '<div class="error">Please enter a meeting topic</div>';
+                return;
+            }
+
+            const results = [
+                {
+                    title: `The Future of ${topic}: Key Trends and Innovations`,
+                    description: `Recent discussions highlight emerging trends in ${topic}, including new methodologies, tools, and best practices that are reshaping the industry.`,
+                    source: 'Tech Community Forum'
+                },
+                {
+                    title: `Case Study: Successful ${topic} Implementation`,
+                    description: `Learn from real-world examples of organizations that have successfully implemented ${topic} strategies, including challenges faced and lessons learned.`,
+                    source: 'Industry Blog'
+                },
+                {
+                    title: `Expert Panel Discussion on ${topic}`,
+                    description: `Industry leaders share insights on the current state and future direction of ${topic}, with actionable advice for practitioners.`,
+                    source: 'Professional Network'
+                }
+            ];
+
+            resultsContainer.innerHTML = results.map(result => `
+                <div class="result-card">
+                    <h3>${result.title}</h3>
+                    <p>${result.description}</p>
+                    <span class="result-source">${result.source}</span>
+                </div>
+            `).join('');
+        }
+
+        // Look up person (demo)
+        function lookupPerson() {
+            const nameInput = document.getElementById('personName');
+            const resultsContainer = document.getElementById('personResults');
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                resultsContainer.innerHTML = '<div class="error">Please enter a name</div>';
+                return;
+            }
+
+            resultsContainer.innerHTML = `
+                <div class="result-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-color: var(--primary-color);">
+                    <h3>💡 Conversation Starters for "${name}"</h3>
+                    <ul style="list-style: none; padding-left: 0; margin-top: 1rem;">
+                        <li style="padding: 0.5rem 0;">💬 "How did you get started in your current role?"</li>
+                        <li style="padding: 0.5rem 0;">💬 "What projects are you most excited about right now?"</li>
+                        <li style="padding: 0.5rem 0;">💬 "What's your take on [recent industry development]?"</li>
+                        <li style="padding: 0.5rem 0;">💬 "I'd love to hear about your background in [their field]"</li>
+                    </ul>
+                </div>
+                <div class="result-card">
+                    <h3>🔍 Research Tips</h3>
+                    <p>For live AI-powered research with Google search integration:</p>
+                    <ul style="margin: 1rem 0;">
+                        <li>Try the <a href="index.html" style="color: var(--primary-color);">online version</a></li>
+                        <li>Or see <a href="SETUP.md" style="color: var(--primary-color);">SETUP.md</a> to enable AI features</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Enter key support
+        document.addEventListener('DOMContentLoaded', () => {
+            displayCurrentDate();
+            loadDemoNews();
+            
+            document.getElementById('meetingTopic').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchMeetingTopic();
+            });
+            
+            document.getElementById('personName').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') lookupPerson();
+            });
+        });
+    </script>
+</body>
+</html>
+

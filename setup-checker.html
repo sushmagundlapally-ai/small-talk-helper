@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallTalk - Setup Checker</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .status-box {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .status-enabled {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success-color);
+        }
+        
+        .status-disabled {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning-color);
+        }
+        
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            min-width: 2rem;
+        }
+        
+        .feature-details {
+            flex: 1;
+        }
+        
+        .feature-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .feature-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .test-button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .test-button:hover {
+            background: var(--primary-dark);
+        }
+        
+        .test-button:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+        
+        .test-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .test-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .test-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+        
+        .setup-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .setup-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .code-box {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔧 Setup Checker</h1>
+            <p class="tagline">Verify your SmallTalk configuration</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <h2>📊 Configuration Status</h2>
+                <p class="section-description">Check which features are enabled in your setup</p>
+            </div>
+
+            <div id="configStatus">
+                <div class="loading">Checking configuration...</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>🧪 API Tests</h2>
+                <p class="section-description">Test your API connections</p>
+            </div>
+
+            <div id="apiTests"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>📝 Quick Setup Guide</h2>
+            </div>
+
+            <div class="status-box">
+                <h3>Required Files</h3>
+                <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+                    <li><strong>config.js</strong> - Your API keys go here</li>
+                    <li><strong>index.html</strong> - Main app</li>
+                    <li><strong>script.js</strong> - App logic</li>
+                    <li><strong>styles.css</strong> - Styling</li>
+                </ol>
+
+                <h3 style="margin-top: 1.5rem;">Setup Steps</h3>
+                <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+                    <li>Open <code>config.js</code> in a text editor</li>
+                    <li>Add your API keys to the CONFIG object</li>
+                    <li>Save the file</li>
+                    <li>Refresh this page to test</li>
+                </ol>
+
+                <a href="API_SETUP.md" class="setup-link" target="_blank">📖 Full Setup Guide →</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                <a href="index.html" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">
+                    ← Back to SmallTalk
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script>
+        const CONFIG = window.SMALLTALK_CONFIG || {};
+
+        function displayConfigStatus() {
+            const container = document.getElementById('configStatus');
+            
+            const features = [
+                {
+                    name: 'Basic Features',
+                    icon: '✅',
+                    description: 'Tech news, Reddit/arXiv search, conversation tips',
+                    enabled: true,
+                    required: false
+                },
+                {
+                    name: 'Enhanced News',
+                    icon: CONFIG.NEWS_API_KEY ? '✅' : '❌',
+                    description: 'Additional tech news from NewsAPI',
+                    enabled: !!CONFIG.NEWS_API_KEY,
+                    required: false,
+                    apiKey: 'NEWS_API_KEY'
+                },
+                {
+                    name: 'Google Search',
+                    icon: (CONFIG.GOOGLE_SEARCH_API_KEY && CONFIG.GOOGLE_SEARCH_ENGINE_ID) ? '✅' : '❌',
+                    description: 'Fetch Google search results for person lookup',
+                    enabled: !!(CONFIG.GOOGLE_SEARCH_API_KEY && CONFIG.GOOGLE_SEARCH_ENGINE_ID),
+                    required: true,
+                    apiKeys: ['GOOGLE_SEARCH_API_KEY', 'GOOGLE_SEARCH_ENGINE_ID']
+                },
+                {
+                    name: 'OpenAI Integration',
+                    icon: CONFIG.OPENAI_API_KEY ? '✅' : '⚪',
+                    description: 'AI-powered summaries using GPT-4o-mini',
+                    enabled: !!CONFIG.OPENAI_API_KEY,
+                    required: false,
+                    apiKey: 'OPENAI_API_KEY',
+                    alternative: 'Anthropic'
+                },
+                {
+                    name: 'Anthropic Integration',
+                    icon: CONFIG.ANTHROPIC_API_KEY ? '✅' : '⚪',
+                    description: 'AI-powered summaries using Claude 3.5 Sonnet',
+                    enabled: !!CONFIG.ANTHROPIC_API_KEY,
+                    required: false,
+                    apiKey: 'ANTHROPIC_API_KEY',
+                    alternative: 'OpenAI'
+                },
+                {
+                    name: 'Full AI Lookup',
+                    icon: (CONFIG.GOOGLE_SEARCH_API_KEY && CONFIG.GOOGLE_SEARCH_ENGINE_ID && (CONFIG.OPENAI_API_KEY || CONFIG.ANTHROPIC_API_KEY)) ? '🎯' : '❌',
+                    description: 'Complete AI-powered person research',
+                    enabled: !!(CONFIG.GOOGLE_SEARCH_API_KEY && CONFIG.GOOGLE_SEARCH_ENGINE_ID && (CONFIG.OPENAI_API_KEY || CONFIG.ANTHROPIC_API_KEY)),
+                    required: false
+                }
+            ];
+
+            const allBasicEnabled = features.slice(0, 2).every(f => f.enabled || !f.required);
+            const fullAiEnabled = features[features.length - 1].enabled;
+
+            container.innerHTML = `
+                <div class="status-box ${fullAiEnabled ? 'status-enabled' : 'status-disabled'}">
+                    <div class="status-icon">${fullAiEnabled ? '🎉' : '⚙️'}</div>
+                    <h3>${fullAiEnabled ? 'All Features Enabled!' : 'Basic Setup Complete'}</h3>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">
+                        ${fullAiEnabled 
+                            ? 'Your SmallTalk app is fully configured with AI-powered features!'
+                            : 'Your app works! Add API keys to enable AI-powered person lookup.'}
+                    </p>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3>Feature Status</h3>
+                    ${features.map(feature => `
+                        <div class="feature-item">
+                            <div class="feature-icon">${feature.icon}</div>
+                            <div class="feature-details">
+                                <div class="feature-name">${feature.name}</div>
+                                <div class="feature-description">
+                                    ${feature.description}
+                                    ${feature.alternative ? ` (Alternative: ${feature.alternative})` : ''}
+                                </div>
+                                ${!feature.enabled && feature.apiKey ? `
+                                    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--warning-color);">
+                                        Missing: <code style="background: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: 3px;">${feature.apiKey}</code>
+                                    </div>
+                                ` : ''}
+                                ${!feature.enabled && feature.apiKeys ? `
+                                    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--warning-color);">
+                                        Missing: ${feature.apiKeys.map(k => `<code style="background: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: 3px;">${k}</code>`).join(', ')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${!fullAiEnabled ? `
+                    <div class="status-box" style="margin-top: 2rem;">
+                        <h3>🚀 Want Full AI Features?</h3>
+                        <p style="color: var(--text-secondary); margin: 1rem 0;">
+                            Add these to <code>config.js</code>:
+                        </p>
+                        <div class="code-box">
+GOOGLE_SEARCH_API_KEY: 'your-key-here',
+GOOGLE_SEARCH_ENGINE_ID: 'your-id-here',
+OPENAI_API_KEY: 'your-key-here', // OR
+ANTHROPIC_API_KEY: 'your-key-here',
+                        </div>
+                        <a href="API_SETUP.md" class="setup-link" target="_blank">📖 Step-by-Step Guide →</a>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function displayAPITests() {
+            const container = document.getElementById('apiTests');
+            
+            const tests = [
+                {
+                    name: 'Google Search',
+                    enabled: !!(CONFIG.GOOGLE_SEARCH_API_KEY && CONFIG.GOOGLE_SEARCH_ENGINE_ID),
+                    testFn: async () => {
+                        const response = await fetch(
+                            `https://www.googleapis.com/customsearch/v1?key=${CONFIG.GOOGLE_SEARCH_API_KEY}&cx=${CONFIG.GOOGLE_SEARCH_ENGINE_ID}&q=test&num=1`
+                        );
+                        if (!response.ok) throw new Error(`API returned ${response.status}`);
+                        const data = await response.json();
+                        if (data.items && data.items.length > 0) {
+                            return '✅ Google Search API is working!';
+                        }
+                        throw new Error('No results returned');
+                    }
+                },
+                {
+                    name: 'OpenAI',
+                    enabled: !!CONFIG.OPENAI_API_KEY,
+                    testFn: async () => {
+                        const response = await fetch('https://api.openai.com/v1/models', {
+                            headers: {
+                                'Authorization': `Bearer ${CONFIG.OPENAI_API_KEY}`
+                            }
+                        });
+                        if (!response.ok) throw new Error(`API returned ${response.status}`);
+                        return '✅ OpenAI API key is valid!';
+                    }
+                },
+                {
+                    name: 'Anthropic',
+                    enabled: !!CONFIG.ANTHROPIC_API_KEY,
+                    testFn: async () => {
+                        const response = await fetch('https://api.anthropic.com/v1/messages', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-api-key': CONFIG.ANTHROPIC_API_KEY,
+                                'anthropic-version': '2023-06-01'
+                            },
+                            body: JSON.stringify({
+                                model: 'claude-3-5-sonnet-20241022',
+                                max_tokens: 10,
+                                messages: [{ role: 'user', content: 'hi' }]
+                            })
+                        });
+                        if (!response.ok) throw new Error(`API returned ${response.status}`);
+                        return '✅ Anthropic API key is valid!';
+                    }
+                }
+            ];
+
+            container.innerHTML = tests.map((test, i) => `
+                <div class="status-box">
+                    <h3>${test.name} API Test</h3>
+                    ${test.enabled ? `
+                        <button class="test-button" onclick="runTest(${i})">
+                            Test ${test.name} Connection
+                        </button>
+                        <div id="test-result-${i}"></div>
+                    ` : `
+                        <p style="color: var(--text-secondary);">
+                            ⚠️ ${test.name} API key not configured. Add it to <code>config.js</code> to enable testing.
+                        </p>
+                    `}
+                </div>
+            `).join('');
+
+            window.runTest = async (index) => {
+                const test = tests[index];
+                const resultDiv = document.getElementById(`test-result-${index}`);
+                const button = document.querySelectorAll('.test-button')[index];
+                
+                button.disabled = true;
+                button.textContent = 'Testing...';
+                resultDiv.innerHTML = '<div class="loading">Running test...</div>';
+                
+                try {
+                    const result = await test.testFn();
+                    resultDiv.innerHTML = `<div class="test-success">${result}</div>`;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <div class="test-error">
+                            ❌ Test failed: ${error.message}
+                            <br><small>Check your API key in config.js</small>
+                        </div>
+                    `;
+                } finally {
+                    button.disabled = false;
+                    button.textContent = `Test ${test.name} Connection`;
+                }
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayConfigStatus();
+            displayAPITests();
+        });
+    </script>
+</body>
+</html>
+
