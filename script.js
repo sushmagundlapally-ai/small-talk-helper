@@ -132,36 +132,42 @@ function getDemoTechNews() {
             title: "AI Breakthrough: New Language Model Achieves Human-Level Reasoning",
             description: "Researchers unveil a groundbreaking AI system that demonstrates unprecedented reasoning capabilities, marking a significant milestone in artificial intelligence development.",
             source: "Tech Insider",
+            url: "https://news.ycombinator.com/",
             date: today
         },
         {
             title: "Quantum Computing Reaches New Milestone with 1000-Qubit Processor",
             description: "Major tech company announces successful development of a 1000-qubit quantum processor, potentially revolutionizing fields from drug discovery to cryptography.",
             source: "Science Daily",
+            url: "https://www.sciencedaily.com/news/computers_math/quantum_computers/",
             date: today
         },
         {
             title: "Sustainable Tech: Solar Panels Now 50% More Efficient",
             description: "Breakthrough in photovoltaic technology promises to dramatically reduce the cost of solar energy and accelerate the transition to renewable power.",
             source: "Green Tech News",
+            url: "https://techcrunch.com/category/green/",
             date: today
         },
         {
             title: "New Programming Language Simplifies Concurrent Computing",
             description: "Developers release innovative language that makes parallel programming accessible to mainstream developers, potentially transforming software development.",
             source: "Dev Community",
+            url: "https://dev.to/",
             date: today
         },
         {
             title: "Breakthrough in Edge Computing Enables Real-Time AI on Devices",
             description: "New chip architecture allows complex AI models to run directly on smartphones and IoT devices without cloud connectivity.",
             source: "Hardware Weekly",
+            url: "https://www.theverge.com/tech",
             date: today
         },
         {
             title: "Open Source Project Hits 1 Million Contributors Worldwide",
             description: "Popular open-source initiative celebrates milestone with contributors from every country, demonstrating the power of global collaboration.",
             source: "Open Source Daily",
+            url: "https://github.com/trending",
             date: today
         }
     ];
