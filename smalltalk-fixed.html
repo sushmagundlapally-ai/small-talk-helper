@@ -24,7 +24,10 @@
                         <h2>🚀 Tech Highlights This Week</h2>
                         <p class="section-description">Fresh topics updated daily to keep you in the loop</p>
                     </div>
-                    <div class="date-badge" id="currentDate"></div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <button onclick="refreshNews()" class="refresh-btn" id="refreshBtn" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">🔄 Refresh News</button>
+                        <div class="date-badge" id="currentDate"></div>
+                    </div>
                 </div>
             </div>
             <div id="techNewsCards" class="cards-grid">
@@ -129,6 +132,53 @@
                 <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #3498db;">🔗 Click to read more</div>
             </div>
         `).join('');
+    }
+
+    // Refresh news - fetch live from Hacker News
+    async function refreshNews() {
+        const btn = document.getElementById('refreshBtn');
+        const container = document.getElementById('techNewsCards');
+        
+        btn.textContent = '⏳ Loading...';
+        btn.disabled = true;
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">Fetching latest news from Hacker News...</div>';
+        
+        try {
+            const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+            const storyIds = await response.json();
+            
+            // Get top 6 stories
+            const articles = [];
+            for (let i = 0; i < 6 && i < storyIds.length; i++) {
+                const storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyIds[i]}.json`);
+                const story = await storyResponse.json();
+                
+                if (story && story.title) {
+                    articles.push({
+                        title: story.title,
+                        description: story.text ? story.text.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 'Click to read the full story on Hacker News',
+                        source: 'Hacker News',
+                        url: story.url || `https://news.ycombinator.com/item?id=${story.id}`,
+                        date: new Date(story.time * 1000).toLocaleDateString()
+                    });
+                }
+            }
+            
+            if (articles.length > 0) {
+                displayNews(articles);
+                btn.textContent = '✅ Refreshed!';
+                setTimeout(() => { btn.textContent = '🔄 Refresh News'; }, 2000);
+            } else {
+                throw new Error('No articles fetched');
+            }
+        } catch (error) {
+            console.error('Error fetching news:', error);
+            displayNews(getDemoNews());
+            btn.textContent = '⚠️ Using Demo';
+            setTimeout(() => { btn.textContent = '🔄 Refresh News'; }, 2000);
+        }
+        
+        btn.disabled = false;
     }
 
     // Search meeting topic
